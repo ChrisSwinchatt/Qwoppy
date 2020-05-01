@@ -3,10 +3,10 @@ import time
 
 import numpy as np
 
-from ..controller import SeleniumQwopController
-from ..ocr        import PyTesseractOcrProvider
-from ..ui         import TkUiProvider
-from ..model      import Model
+from ..controller import *
+from ..ocr        import *
+from ..ui         import *
+from ..model      import *
 
 def try_parse(distance_text):
     try:
