@@ -6,7 +6,7 @@ import torch.optim    as optim
 def is_enumerable(x):
     return hasattr(x, '__len__')
 
-class Model(nn.Module):
+class Agent(nn.Module):
     def __init__(self):
         super().__init__()
         self.lstm   = nn.LSTM(1, 256)

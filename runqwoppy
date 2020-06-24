@@ -1,0 +1,5 @@
+#!/bin/bash
+
+[[ "$PYTHON" = "" ]] && PYTHON="python3"
+
+PYTHONPATH="." $PYTHON -m qwoppy $*

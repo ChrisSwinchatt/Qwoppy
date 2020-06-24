@@ -1,5 +1,5 @@
 from   abc                            import ABC, abstractmethod, abstractproperty
-import logging                        as     log
+import logging
 from   PIL                            import ImageGrab
 from   selenium                       import webdriver
 from   selenium.webdriver.common.keys import Keys
@@ -58,11 +58,11 @@ QWOP_HEIGHT    = 40
 class SeleniumQwopController(QwopController):
     def __init__(self):
         import time
-        log.info('Opening browser')
+        logging.info('Opening browser')
         self.browser = webdriver.Firefox()
         self.browser.set_window_position(0, 0)
         self.browser.set_window_size(BROWSER_WIDTH, BROWSER_HEIGHT)
-        log.info('Loading QWOP')
+        logging.info('Loading QWOP')
         self.browser.get(QWOP_URL)
         time.sleep(1)
         self.canvas = self.browser.find_element_by_id('window1')

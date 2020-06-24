@@ -1,5 +1,5 @@
 from .controller import *
-from .model      import *
+from .agent      import *
 from .ocr        import *
 from .ui         import *
-from .__main__   import main
+from .app.main   import main
