@@ -24,7 +24,7 @@ import re
 import torch
 import unittest
 
-from project.ocr import *
+from qwoppy.ocr import *
 
 class TestOcr(unittest.TestCase):
     def test_to_sentence(self):

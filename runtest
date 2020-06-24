@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 [[ "$PYTHON" = "" ]] && PYTHON="python3"
 
 cd "test"

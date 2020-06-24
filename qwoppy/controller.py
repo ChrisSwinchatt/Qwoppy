@@ -25,6 +25,8 @@ from   selenium                       import webdriver
 from   selenium.webdriver.common.keys import Keys
 from   selenium.webdriver.common.by   import By
 
+import qwoppy.ocr as ocr
+
 class QwopController(ABC):
     @abstractproperty
     def location(self):
@@ -70,10 +72,10 @@ class QwopController(ABC):
 BROWSER_WIDTH  = 1024
 BROWSER_HEIGHT = 768
 QWOP_URL       = 'http://foddy.net/Athletics.html'
-QWOP_OFFSET_X  = 200
-QWOP_OFFSET_Y  = 90
-QWOP_WIDTH     = 250
-QWOP_HEIGHT    = 40
+QWOP_OFFSET_X  = 250
+QWOP_OFFSET_Y  = 150
+QWOP_WIDTH     = ocr.Settings.IMAGE_WIDTH
+QWOP_HEIGHT    = ocr.Settings.IMAGE_HEIGHT
 
 class SeleniumQwopController(QwopController):
     def __init__(self):
@@ -100,7 +102,7 @@ class SeleniumQwopController(QwopController):
 
     @property
     def distance_rect(self):
-        return QWOP_OFFSET_X, QWOP_OFFSET_Y, QWOP_OFFSET_X + QWOP_WIDTH, QWOP_OFFSET_Y + QWOP_HEIGHT
+        return QWOP_OFFSET_X, QWOP_OFFSET_Y, QWOP_WIDTH, QWOP_HEIGHT
 
     def get_image(self):
         x, y       = self.location

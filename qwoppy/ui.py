@@ -47,6 +47,10 @@ class UiProvider(ABC):
     def is_open(self):
         raise NotImplementedError
 
+    @abstractmethod
+    def close(self):
+        raise NotImplementedError
+
 class TkUiProvider(UiProvider):
     def __init__(self, title_base='QWOP'):
         self.root = tk.Tk()
@@ -85,6 +89,9 @@ class TkUiProvider(UiProvider):
 
     def update(self):
         self.root.update()
+
+    def close(self):
+        self.root.close()
 
     @property
     def is_open(self):

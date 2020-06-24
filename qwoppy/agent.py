@@ -23,26 +23,42 @@ import torch.autograd as autograd
 import torch.nn       as nn
 import torch.optim    as optim
 
-def is_enumerable(x):
-    return hasattr(x, '__len__')
+import qwoppy.ocr as ocr
+
+class Settings:
+    RNN    = nn.GRU
+    STACK  = 1
+    HIDDEN = 256
 
 class Agent(nn.Module):
-    def __init__(self):
+    def __init__(self, device, train=True):
         super().__init__()
-        self.lstm   = nn.LSTM(1, 256)
-        self.output = nn.Linear(256, 6)
-        self.add_module('lstm',   self.lstm)
-        self.add_module('output', self.output)
+        self.train  = train
+        self.device = device
+        self.rnn    = Settings.RNN(ocr.Constants.NUM_TOKENS, Settings.HIDDEN, Settings.STACK).to(device)
+        self.out    = nn.Linear(Settings.HIDDEN, 6).to(device)
+        hsize       = (Settings.STACK, 1, Settings.HIDDEN)
+        if Settings.RNN.__name__ == 'LSTM':
+            h = torch.randn(hsize, device=device)
+            c = torch.randn(hsize, device=device)
+            self.h = (h,c)
+        else:
+            self.h = torch.randn(hsize, device=device)
+        self.optim         = optim.Adam(self.parameters(), lr=0.0001)
+        self.loss          = nn.MSELoss()
+        self.prev_distance = None
 
-    def __len__(self):
-        return len(self.shape)
-
-    def forward(self, X):
-        X, _ = self.lstm.forward(X)
-        return self.output.forward(X)
-    
-    def generate_action(self, current_distance):
-        X = torch.tensor([[[current_distance]]], requires_grad=True)
-        X = self.forward(X)
-        y = torch.argmax(X)
+    def generate_action(self, X):
+        if self.train and self.prev_distance is not None:
+            # If there is a previous distance, compute gradients & backprop.
+            loss = self.loss(X, self.prev_distance)**2
+            loss.backward(retain_graph=True)
+            self.optim.step()
+        if self.train:
+            self.optim.zero_grad()
+        self.prev_distance = X
+        # Generate action from the new distance.
+        X, self.h = self.rnn.forward(X, self.h)
+        X         = self.out.forward(X)
+        y         = torch.argmax(X)
         return y.item()

@@ -19,5 +19,5 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 '''
 
 if __name__ == '__main__':
-    from qwoppy.app.main import main
+    from .app import main
     main()
